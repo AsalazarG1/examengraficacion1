@@ -12,11 +12,11 @@
 
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.soft = true;
-    renderer.shadowMap.type = THREE.PCFShadowMap;
+    //renderer.shadowMap.type = THREE.PCFShadowMap;
+
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     camera.position.set( 0, - 6, 100 );
-    //camera.position.z = 100;
-    //camera.position.y = 2;
     let mesh;
     let mesh1;
     let mesh3;
@@ -24,9 +24,9 @@
     
     let loader1 = new THREE.TextureLoader();
     
-        loader1.load('public/mercurio2.jpg', function(texture1){
+        loader1.load('public/luna.jpg', function(texture1){
             let geometry1 = new THREE.SphereGeometry(5,60,60)
-            let material1 = new THREE.MeshBasicMaterial({
+            let material1 = new THREE.MeshPhongMaterial({
                 map: texture1
             });
             mesh1 = new THREE.Mesh(geometry1,material1);
@@ -34,7 +34,7 @@
             mesh1.position.y=0;
             mesh1.position.z=30
             mesh1.position.x=50;
-            
+            mesh1.receiveShadow = true;
             mesh1.castShadow=true;
             scene.add(mesh1);
         })
@@ -49,6 +49,7 @@
         mesh = new THREE.Mesh(geometry, material);
         mesh.position.y = 0;
         mesh.position.x=-45
+        mesh.receiveShadow = true;
         scene.add(mesh);
     });
 
@@ -60,12 +61,14 @@
         
             loader3.load('public/map2.jpg', function(texture3){
                 let geometry3 = new THREE.SphereGeometry(15,60,60)
-                let material3 = new THREE.MeshBasicMaterial({
+                let material3 = new THREE.MeshPhongMaterial({
                     map: texture3
                 });
                 mesh3 = new THREE.Mesh(geometry3,material3);
                 mesh3.receiveShadow  = true;
                 mesh3.position.x=50;
+                mesh3.receiveShadow = true;
+                mesh3.castShadow = true;
                 scene.add(mesh3);
             })
 
@@ -81,15 +84,23 @@
 
     //let mesh = new THREE.Mesh(geometry, groundMaterial);
 
-    let pointLight = new THREE.PointLight(0x000000);
-    pointLight.position.y = 90 ;
-    pointLight.position.z = 60;
-    //pointLight.position.x=0;
-    pointLight.castShadow = true;
-    scene.add(pointLight);
-   
+var spotLight = new THREE.SpotLight( 0xffffff );
+spotLight.position.set( -10, 0, 0 );
 
-    scene.add( new THREE.AmbientLight( 0x222233 ) );
+spotLight.castShadow = true;
+
+spotLight.shadow.mapSize.width = 1024;
+spotLight.shadow.mapSize.height = 1024;
+
+scene.add( spotLight );
+
+// helper de las luces 
+// var spotLightHelper = new THREE.SpotLightHelper( spotLight );
+// scene.add( spotLightHelper );
+
+
+
+    scene.add( new THREE.AmbientLight( 0x222233 , 3) );
     
 
 
